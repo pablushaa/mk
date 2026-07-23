@@ -20,6 +20,5 @@ kernel(void)
         timer_init(TIMER_HZ);
         txtm_printks("+ timer init\n");
         asm volatile ("sti");
-        txtm_clear_scr();
         for(;;) { }
 }
