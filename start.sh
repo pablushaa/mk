@@ -2,7 +2,7 @@ set -ex
 rm -rf bin/*
 mkdir -p bin
 nasm src/boot.s -o bin/boot.bin
-CFLAGS="-m32 -ffreestanding -fno-pie -nostdlib -fno-stack-protector"
+CFLAGS="-m32 -ffreestanding -fno-pie -nostdlib -fno-stack-protector -DKERNEL_GIT=\"$(git rev-parse --short HEAD)\""
 
 gcc -m32 -c src/kernel.c -o bin/kernel.o $CFLAGS
 
