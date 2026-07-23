@@ -1,6 +1,10 @@
+#include "drivers/ps2kb.h"
 #include "drivers/txtm.h"
+#include "drivers/timer.h"
 #include "sys/idt.h"
 #include "sys/pic.h"
+#include "../config.h"
+#include "util/convert.h"
 
 void
 kernel(void)
@@ -12,8 +16,9 @@ kernel(void)
         pic_init();
         pic_en_irq(0);
         pic_en_irq(1);
-        pic_en_irq(2);
         txtm_printks("+ pic init\n");
+        timer_init(TIMER_HZ);
+        txtm_printks("+ timer init\n");
         asm volatile ("sti");
-        for(;;) { asm volatile("hlt"); }
+        for(;;) { }
 }
