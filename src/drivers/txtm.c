@@ -29,12 +29,14 @@ txtm_clear_scr(void)
                 vmem[i * 2] = 0;
                 vmem[i * 2 + 1] = COLOR;
         }
+        ROW=0; COL=0;
 }
 
 /* print one char */
 void
 txtm_printkc(char c)
 {
+        uint8_t state = 1;
         if (ROW == 24)
         {
                 for (int i = 160; i < 80 * 25 * 2; i++)
@@ -45,10 +47,18 @@ txtm_printkc(char c)
         }
         if (c == '\n') { ROW++; COL=0; return; }
         if (c == '\r') { COL=0; return; }
+        if (c == 0x08)
+        {
+                if (COL == 0 && ROW > 0) {ROW--; COL=79; }
+                else {COL--;}
+                c = ' ';
+                state = 0;
+        }
         uint16_t pos = (ROW * 80 + COL) * 2;
         vmem[pos] = c;
         vmem[pos + 1] = COLOR;
-        COL++;
+
+        COL += state;
         if (COL % 80 == 0 && COL != 0)
         {
                 COL = 0;
