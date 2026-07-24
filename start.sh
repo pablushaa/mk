@@ -28,4 +28,4 @@ ld -m elf_i386 -T linker.ld bin/kernel.o bin/txtm.o bin/convert.o bin/io.o bin/i
 objcopy -O binary bin/kernel.elf bin/kernel.bin
 cat bin/boot.bin bin/kernel.bin > bin/image.bin
 truncate -s 65536 bin/image.bin
-qemu-system-i386 -drive file=bin/image.bin,format=raw -d int -m 64M
+qemu-system-i386 -drive file=bin/image.bin,format=raw -d int -m 2M
