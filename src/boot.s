@@ -1,5 +1,6 @@
 org 0x7C00
 
+mov [0x8000], dx
 xor ax, ax
 mov ds, ax
 mov ss, ax
@@ -17,18 +18,36 @@ jc err
 ; check for a20 gate
 call check_a20
 
-lba_packet:
-        db 0x10   ; packet size
-        db 0x00   ; reserved
-        dw 120     ; sectors
-        dw 0x0000 ; offset
-        dw 0x1000 ; segment
-        dq 1      ; start
-
 mov si, lba_packet
 mov ah, 0x42
+mov dl, [0x8000]
 int 13h
 jc err
+
+; getting memory map to 0x9000
+get_mmap:
+        pusha
+        xor ax, ax
+        mov es, ax
+        mov di, 0x9000
+        xor ebx, ebx
+        mov edx, 0x534D4150
+        xor bp, bp
+.loop:
+        mov eax, 0xE820
+        mov ecx, 24
+        int 0x15
+        jc .done
+        cmp eax, 0x534D4150
+        jne .done
+        inc bp
+        add di, 24
+        cmp ebx, 0
+        je .done
+        jmp .loop
+.done:
+        mov [0x8FFE], bp
+        popa
 
 lgdt [gdt_descriptor]
 
@@ -85,6 +104,14 @@ err:
         int 10h
         hlt
         jmp err
+
+lba_packet:
+        db 0x10   ; packet size
+        db 0x00   ; reserved
+        dw 120     ; sectors
+        dw 0x0000 ; offset
+        dw 0x1000 ; segment
+        dq 1      ; start
 
 gdt_start:
         ; null descriptor
