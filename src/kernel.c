@@ -6,6 +6,7 @@
 #include "../config.h"
 #include "util/convert.h"
 #include "mm/mmap.h"
+#include "mm/paging.h"
 
 void
 kernel(void)
@@ -20,8 +21,11 @@ kernel(void)
         txtm_printks("+ pic init\n");
         timer_init(TIMER_HZ);
         txtm_printks("+ timer init\n");
+        asm volatile ("sti");
         mmap_init();
-        txtm_printks(itoa(mmap_gfree_pages() / 256, 10));
-        txtm_printks(" MB free");
+        paging_init();
+        txtm_printks("+ paging init\n");
+        txtm_printks(itoa(mmap_gfree_pages(), 10));
+        txtm_printks(" pages free");
         for(;;) { }
 }

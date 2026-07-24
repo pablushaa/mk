@@ -24,6 +24,7 @@ mov dl, [0x8000]
 int 13h
 jc err
 
+; getting memory map to 0x9000
 get_mmap:
         pusha
         xor ax, ax

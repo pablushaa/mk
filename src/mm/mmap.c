@@ -2,6 +2,7 @@
 #include "../../config.h"
 #include "../drivers/txtm.h"
 #include "../util/convert.h"
+#include <stdint.h>
 
 #define MMAP_CNT_ADDR 0x8FFE
 #define MMAP_START    0x9000
@@ -9,6 +10,7 @@
 static uint8_t mbitmap[MMAP_BITMAP_SIZE];
 uint16_t* mmap_count = (uint16_t*) 0x8FFE;
 
+/* initialise memory bitmap */
 void
 mmap_init(void)
 {
@@ -30,6 +32,7 @@ mmap_init(void)
         mmap_set_used(0, 0x100000); /* maybe i will remove this shit one day... but now it should be reserved just in case */
 }
 
+/* set some addresses as used */
 void
 mmap_set_used(uint32_t addr, uint32_t len)
 {
@@ -52,6 +55,7 @@ mmap_set_used(uint32_t addr, uint32_t len)
         }
 }
 
+/* set some addresses as free */
 void
 mmap_set_free(uint32_t addr, uint32_t len)
 {
@@ -74,6 +78,7 @@ mmap_set_free(uint32_t addr, uint32_t len)
         }
 }
 
+/* get free memory pages */
 uint32_t
 mmap_gfree_pages(void)
 {
@@ -88,4 +93,22 @@ mmap_gfree_pages(void)
                 }
         }
         return res;
+}
+
+/* allocate one frame */
+uint32_t
+mmap_alloc_frame(void)
+{
+        for (uint32_t i = 0; i < MMAP_BITMAP_SIZE; i++)
+        {
+                for (uint8_t j = 0; j < 8; j++)
+                {
+                        if (((mbitmap[i] >> j) & 0x1) == 0)
+                        {
+                                uint32_t addr = ((i << 3) + j) * 4096;
+                                mmap_set_used(addr, 4096);
+                                return addr;
+                        }
+                }
+        }
 }
