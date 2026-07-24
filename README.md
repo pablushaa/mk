@@ -12,6 +12,7 @@ tiny 32-bit kernel
 
 # todo:
 
+- kalloc
 - memory management
 - vga driver
 - vfs
