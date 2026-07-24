@@ -5,6 +5,8 @@
 #include "sys/pic.h"
 #include "../config.h"
 #include "util/convert.h"
+#include "mm/mmap.h"
+#include "mm/paging.h"
 
 #define TO_STR(x) #x
 #define STR(x) TO_STR(x)
@@ -23,5 +25,10 @@ kernel(void)
         timer_init(TIMER_HZ);
         txtm_printks("+ timer init at " STR(TIMER_HZ) " hz\n");
         asm volatile ("sti");
+        mmap_init();
+        paging_init();
+        txtm_printks("+ paging init\n");
+        txtm_printks(itoa(mmap_gfree_pages(), 10));
+        txtm_printks(" pages free");
         for(;;) { }
 }
