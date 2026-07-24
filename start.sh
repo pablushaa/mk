@@ -16,10 +16,12 @@ gcc -m32 -c src/sys/io.c -o bin/io.o $CFLAGS
 gcc -m32 -c src/sys/idt.c -o bin/idt.o $CFLAGS
 gcc -m32 -c src/sys/pic.c -o bin/pic.o $CFLAGS
 
+gcc -m32 -c src/mm/mmap.c -o bin/mmap.o $CFLAGS
+
 nasm -f elf32 src/sys/isr.s -o bin/isr.o
 
-ld -m elf_i386 -T linker.ld bin/kernel.o bin/txtm.o bin/convert.o bin/io.o bin/isr.o bin/idt.o bin/pic.o bin/timer.o bin/ps2kb.o -o bin/kernel.elf
+ld -m elf_i386 -T linker.ld bin/kernel.o bin/txtm.o bin/convert.o bin/io.o bin/isr.o bin/idt.o bin/pic.o bin/timer.o bin/ps2kb.o bin/mmap.o -o bin/kernel.elf
 objcopy -O binary bin/kernel.elf bin/kernel.bin
 cat bin/boot.bin bin/kernel.bin > bin/image.bin
 truncate -s 65536 bin/image.bin
-qemu-system-i386 -drive file=bin/image.bin,format=raw --enable-kvm
+qemu-system-i386 -drive file=bin/image.bin,format=raw -d int
