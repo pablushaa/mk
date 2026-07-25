@@ -21,7 +21,7 @@ timer_init(uint16_t hz)
 }
 
 void
-timer_tick(void)
+timer_tick(registers_t* regs)
 {
         jiffies++;
 }
