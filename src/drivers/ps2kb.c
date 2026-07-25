@@ -1,10 +1,8 @@
 #include "ps2kb.h"
-#include "../sys/io.h"
-#include "txtm.h"
-#include "../util/convert.h"
 
 uint8_t shift_st = 0;
 
+/* default scan codes */
 static uint8_t sc_arr[128] = {
         0, 0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',
         0x08, 0, 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']',
@@ -13,6 +11,7 @@ static uint8_t sc_arr[128] = {
         0, 0, 0,  ' ',
 };
 
+/* shift scan codes */
 static uint8_t sc_arr_sh[128] = {
         0, 0, '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-',
         0x08, 0, 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}',
@@ -21,6 +20,7 @@ static uint8_t sc_arr_sh[128] = {
         0, 0, 0,  ' ',
 };
 
+/* keyboard interrupt */
 void
 ps2kb_intr(registers_t* regs)
 {
@@ -34,12 +34,12 @@ ps2kb_intr(registers_t* regs)
                 if (scan == 0x36 || scan == 0x2A) { shift_st = 1; }
                 else if (sc_arr[scan] && shift_st == 0) { txtm_printkc(sc_arr[scan]); }
                 else if (sc_arr_sh[scan] && shift_st == 1) { txtm_printkc(sc_arr_sh[scan]); }
-                else
+                /* else
                 {
                         txtm_printks("key ");
                         txtm_printks(itoa(scan, 16));
                         txtm_printkc(' ');
                         txtm_printkc('\n');
-                }
+                } */
         }
 }

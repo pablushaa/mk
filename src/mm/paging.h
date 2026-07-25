@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+#include "mmap.h"
+
 void paging_init(void);
 
 #endif

@@ -10,7 +10,7 @@ pic_init(void)
         io_wait();
 
         /* vector remap: irq0-7 -> vector 0x20-0x27
-         *                        irq8-15 -> vector 0x28-0x2F */
+           irq8-15 -> vector 0x28-0x2F */
         outb(0x21, 0x20);
         io_wait();
         outb(0xA1, 0x28);
@@ -33,6 +33,7 @@ pic_init(void)
         outb(0xA1, 0xFF);
 }
 
+/* enables interrupts from irq */
 void
 pic_en_irq(uint8_t irq)
 {

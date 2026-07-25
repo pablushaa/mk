@@ -1,6 +1,7 @@
 #include "paging.h"
-#include "mmap.h"
 
+/* this seems to work now. TODO: add dynamic allocation
+   initialises virtual adressing. TODO: add documentation */
 void
 paging_init(void)
 {

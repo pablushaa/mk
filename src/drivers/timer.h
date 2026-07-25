@@ -2,7 +2,10 @@
 #define TIMER_H
 
 #include <stdint.h>
-#include "../sys/idt.h"
+
+#include "../../config.h"
+#include "../sys/types.h"
+#include "../sys/io.h"
 
 void timer_init(uint16_t hz);
 void timer_tick(registers_t* regs);
