@@ -11,22 +11,22 @@ gcc -m32 -c src/drivers/timer.c -o bin/timer.o $CFLAGS
 gcc -m32 -c src/drivers/ps2kb.c -o bin/ps2kb.o $CFLAGS
 
 gcc -m32 -c src/util/convert.c -o bin/convert.o $CFLAGS
+gcc -m32 -c src/util/string.c -o bin/string.o $CFLAGS
 
 gcc -m32 -c src/sys/io.c -o bin/io.o $CFLAGS
 gcc -m32 -c src/sys/idt.c -o bin/idt.o $CFLAGS
 gcc -m32 -c src/sys/pic.c -o bin/pic.o $CFLAGS
-
-gcc -m32 -c src/mm/mmap.c -o bin/mmap.o $CFLAGS
-gcc -m32 -c src/mm/paging.c -o bin/paging.o $CFLAGS
-gcc -m32 -c src/mm/alloc.c -o bin/alloc.o $CFLAGS
+gcc -m32 -c src/sys/gdt.c -o bin/gdt.o $CFLAGS
 
 nasm -f elf32 src/sys/isr.s -o bin/isr.o
 
-ld -m elf_i386 -T linker.ld bin/kernel.o bin/txtm.o bin/convert.o bin/io.o bin/isr.o bin/idt.o bin/pic.o bin/timer.o bin/ps2kb.o bin/mmap.o \
-        bin/paging.o bin/alloc.o \
+ld -m elf_i386 -T \
+        linker.ld bin/kernel.o bin/txtm.o bin/convert.o bin/io.o bin/isr.o bin/idt.o bin/pic.o \
+        bin/timer.o bin/ps2kb.o bin/gdt.o \
         -o bin/kernel.elf
 
 objcopy -O binary bin/kernel.elf bin/kernel.bin
 cat bin/boot.bin bin/kernel.bin > bin/image.bin
 truncate -s 65536 bin/image.bin
-qemu-system-i386 -drive file=bin/image.bin,format=raw -d int
+
+qemu-system-i386 -drive file=bin/image.bin,format=raw -no-shutdown -no-reboot -d int

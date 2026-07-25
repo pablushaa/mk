@@ -7,7 +7,7 @@
 #include "vectors.inc"
 #undef VECTOR
 
-idt_ent_t* idt;
+idt_ent_t idt[256];
 isr_t* isr_tbl;
 
 /* initialise interrupt descriptor table */
@@ -15,8 +15,6 @@ void
 idt_init(void)
 {
         idt_ptr_t iptr;
-        idt = (idt_ent_t*) kalloc(sizeof(idt_ent_t) * 256);
-        isr_tbl = (void*) kalloc(sizeof(size_t) * 256);
         iptr.limit = 256 * 8 - 1;
         iptr.addr = (uint32_t) idt;
 
@@ -29,6 +27,7 @@ idt_init(void)
         asm volatile ("lidt %0" : : "m"(iptr));
         isr_tbl[32] = timer_tick;
         isr_tbl[33] = ps2kb_intr;
+        idt_set_ent(0xEB, (uint32_t) isr235, 0x08, 0xEE);
 }
 
 /* filling one table entry
@@ -48,6 +47,11 @@ idt_set_ent(uint8_t num, uint32_t handler, uint16_t selector, uint8_t flags)
 void
 idt_handler(registers_t *regs)
 {
+        if (regs->int_no == 0xEB)
+        {
+                txtm_printks("penis!\n");
+        }
+
         if (regs->int_no < 32) {
                 txtm_printks("err ");
                 txtm_printks(itoa(regs->int_no, 10));

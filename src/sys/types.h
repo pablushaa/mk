@@ -36,4 +36,25 @@ typedef struct {
         uint32_t attr;
 } __attribute__((packed)) e820_ent_t;
 
+typedef struct {
+        uint32_t res0;
+        uint32_t esp0;
+        uint32_t ss0;
+        uint32_t res1;
+} __attribute__((packed)) tss_t;
+
+typedef struct {
+        uint16_t limit_low;
+        uint16_t base_low;
+        uint8_t base_mid;
+        uint8_t acc;
+        uint8_t flags;
+        uint8_t base_high;
+} __attribute__((packed)) gdt_ent_t;
+
+typedef struct {
+        uint16_t limit;
+        uint32_t base;
+} __attribute__((packed)) gdt_ptr_t;
+
 #endif

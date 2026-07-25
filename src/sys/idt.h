@@ -8,7 +8,6 @@
 #include "../drivers/ps2kb.h"
 #include "../util/convert.h"
 #include "../drivers/txtm.h"
-#include "../mm/alloc.h"
 #include "io.h"
 
 void idt_init(void);
