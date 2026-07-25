@@ -4,18 +4,20 @@
 #include "../drivers/txtm.h"
 #include "../drivers/timer.h"
 #include "../drivers/ps2kb.h"
-
-idt_ent_t idt[256];
+#include "../mm/alloc.h"
 
 /* i hate idt so much */
 #define VECTOR(n) extern void isr##n(void);
 #include "vectors.inc"
 #undef VECTOR
 
+idt_ent_t* idt;
+
 void
 idt_init(void)
 {
         idt_ptr_t iptr;
+        idt = (idt_ent_t*) kalloc(sizeof(idt_ent_t) * 256);
         iptr.limit = 256 * 8 - 1;
         iptr.addr = (uint32_t) idt;
         #define VECTOR(n) idt_set_ent(n, (uint32_t)isr##n, 0x08, 0x8E);
