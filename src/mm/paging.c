@@ -22,7 +22,7 @@ paging_init(void)
         }
 
         page_dir_phy[0] = ((uint32_t)page_tabl_phy) | 0x03; /* r0, present, rw */
-        page_dir_phy[1] = ((uint32_t)kheap_tabl_phy) | 0x03; /* r0, present, rw */
+        page_dir_phy[768] = ((uint32_t)kheap_tabl_phy) | 0x03; /* r0, present, rw */
 
         asm volatile ("mov %0, %%cr3" : : "r"((uint32_t)page_dir_phy));
         asm volatile ("mov %%cr0, %0" : "=r"(cr0));
