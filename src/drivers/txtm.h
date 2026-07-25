@@ -39,12 +39,9 @@
 #define FG_YELOW 0x0E
 #define FG_WHITE 0x0F
 
-static char* vmem = (char*) 0xB8000;
-static uint8_t ROW, COL, COLOR;
-
 void txtm_init_txtm(void);
 void txtm_set_cur(uint8_t row, uint8_t col);
-void txtm_set_col(uint8_t color);
+void txtm_set_color(uint8_t color);
 void txtm_clear_scr(void);
 void txtm_printks(char* s);
 void txtm_printkc(char c);

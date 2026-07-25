@@ -1,13 +1,13 @@
-#include "drivers/ps2kb.h"
-#include "drivers/txtm.h"
 #include "drivers/timer.h"
+#include "drivers/txtm.h"
+#include "util/convert.h"
+#include "../config.h"
 #include "sys/idt.h"
 #include "sys/pic.h"
-#include "../config.h"
-#include "util/convert.h"
-#include "mm/mmap.h"
 #include "mm/paging.h"
-#include "mm/alloc.h"
+#include "mm/mmap.h"
+
+/* main kernel function. for now, it is a garbage */
 
 void
 kernel(void)

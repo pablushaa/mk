@@ -1,3 +1,6 @@
+; very very cool macro toset 256 isr
+; saves current regs and call idt_handler
+
 %macro VECTOR 1
 global isr%1
 isr%1:

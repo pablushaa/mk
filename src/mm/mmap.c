@@ -1,8 +1,4 @@
 #include "mmap.h"
-#include "../../config.h"
-#include "../drivers/txtm.h"
-#include "../util/convert.h"
-#include <stdint.h>
 
 #define MMAP_CNT_ADDR 0x8FFE
 #define MMAP_START    0x9000
@@ -29,7 +25,10 @@ mmap_init(void)
                 }
         }
 
-        mmap_set_used(0, 0x100000); /* maybe i will remove this shit one day... but now it should be reserved just in case */
+         /* maybe i will remove this shit one day...
+          but now it should be reserved for the kernel
+          TODO: think about it */
+        mmap_set_used(0, 0x100000);
 }
 
 /* set some addresses as used */

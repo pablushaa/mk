@@ -1,5 +1,7 @@
 #include "io.h"
 
+/* cant say anything about this one */
+
 uint8_t
 inb(uint16_t port)
 {

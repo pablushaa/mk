@@ -1,5 +1,9 @@
 #include "txtm.h"
 
+static char* vmem = (char*) 0xB8000;
+static uint8_t ROW, COL, COLOR;
+
+/* initialise text mode */
 void
 txtm_init_txtm(void)
 {
@@ -8,6 +12,7 @@ txtm_init_txtm(void)
         COLOR = 0x0F;
 }
 
+/* set cursor at some position */
 void
 txtm_set_cur(uint8_t row, uint8_t col)
 {
@@ -16,11 +21,12 @@ txtm_set_cur(uint8_t row, uint8_t col)
 }
 
 void
-txtm_set_col(uint8_t color)
+txtm_set_color(uint8_t color)
 {
         COLOR = color;
 }
 
+/* clear screen with COLOR */
 void
 txtm_clear_scr(void)
 {
@@ -37,6 +43,7 @@ void
 txtm_printkc(char c)
 {
         uint8_t state = 1;
+        /* scrolling */
         if (ROW == 24)
         {
                 for (int i = 160; i < 80 * 25 * 2; i++)
@@ -47,13 +54,14 @@ txtm_printkc(char c)
         }
         if (c == '\n') { ROW++; COL=0; return; }
         if (c == '\r') { COL=0; return; }
-        if (c == 0x08)
+        if (c == 0x08) /* backspace */
         {
                 if (COL == 0 && ROW > 0) {ROW--; COL=79; }
                 else {COL--;}
                 c = ' ';
                 state = 0;
         }
+
         uint16_t pos = (ROW * 80 + COL) * 2;
         vmem[pos] = c;
         vmem[pos + 1] = COLOR;
@@ -70,5 +78,6 @@ txtm_printkc(char c)
 void
 txtm_printks(char *s)
 {
+        /* simple as hell! */
         while (*s) txtm_printkc(*s++);
 }
