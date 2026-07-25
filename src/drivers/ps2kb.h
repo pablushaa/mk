@@ -2,8 +2,8 @@
 #define PS2KB_H
 
 #include <stdint.h>
+#include "../sys/idt.h"
 
-uint8_t ps2kb_init(void);
-uint8_t ps2kb_intr(void);
+void ps2kb_intr(registers_t *regs);
 
 #endif

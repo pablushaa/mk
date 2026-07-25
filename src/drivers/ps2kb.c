@@ -21,8 +21,8 @@ static uint8_t sc_arr_sh[128] = {
         0, 0, 0,  ' ',
 };
 
-uint8_t
-ps2kb_intr(void)
+void
+ps2kb_intr(registers_t* regs)
 {
         uint8_t scan = inb(0x60);
         if (scan & 0x80)
@@ -42,5 +42,4 @@ ps2kb_intr(void)
                         txtm_printkc('\n');
                 }
         }
-        return scan;
 }

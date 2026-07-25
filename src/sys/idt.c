@@ -53,7 +53,7 @@ idt_handler(registers_t *regs)
         }
 
         if (regs->int_no >= 32 && regs->int_no < 48) {
-                isr_tbl[regs->int_no]();
+                isr_tbl[regs->int_no](regs);
 
                 if (regs->int_no >= 40) {
                         outb(0xA0, 0x20);
